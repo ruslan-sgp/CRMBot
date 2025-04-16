@@ -306,17 +306,32 @@ def print_info(message):
 
 
 def display_stat():
-    stat = "\n\n".join(map(get_stat, known_chats.values()))
+    stat = "\n\n".join(map(get_stat, list(known_chats.values())[-8:]))
     info = f"""Статистика регистраций:\n\n{stat}"""
     print(info)
-    bot.send_message(message.chat.id, info, parse_mode="Markdown")
+    bot.send_message(message.chat.id, info)
 
 
 def get_stat(cs: ChatState):
-    uname = cs.tgid if cs.uname == cs.tgid else f"{cs.tgid}\n{cs.uname}"
-    result = f"""{uname}\n"""
-    # result = f"""{uname}\n{'\n'.join(map(lambda a: '\n'.join([a.timestamp, a.qid, a.answer]), cs.answers[-5:]))}"""
-    return result
+    parts = ['@' + cs.tgid]
+    if cs.uname != cs.tgid:
+        parts.append(cs.uname)
+    q1 = q2 = extra = ts = ""
+    for a in cs.answers:
+        if a.qid == "q1":
+            q1 = a.answer
+        if a.qid == "q2":
+            q2 = a.answer
+        if a.qid == "extra":
+            extra = a.answer
+        ts = a.timestamp
+    parts.append("Q1: " + q1)
+    parts.append("Q2: " + q2)
+    if extra:
+        parts.append(extra)
+    if ts:
+        parts.append(ts[:-3])
+    return "\n".join(parts)
 
 
 def save_answer():
