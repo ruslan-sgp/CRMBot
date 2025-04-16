@@ -225,12 +225,14 @@ def start_new_chat():
 
 
 def send_q2():
-    text = f"""2. Собираетесь ли вы внедрять новые ERP/CRM системы на вашем предприятии в ближайшее время?
-"""
-    keyboard = ReplyKeyboardMarkup(row_width=2)
-    button1 = telebot.types.KeyboardButton("Да")
-    button2 = telebot.types.KeyboardButton("Нет")
-    keyboard.add(button1, button2)
+    text = f"""2. В какой сфере работаете? (выберите кнопку либо введите свой вариант)"""
+    keyboard = ReplyKeyboardMarkup(row_width=1)
+    button1 = telebot.types.KeyboardButton("Производство")
+    button2 = telebot.types.KeyboardButton("Торговля")
+    button3 = telebot.types.KeyboardButton("Туризм")
+    button4 = telebot.types.KeyboardButton("Услуги")
+    button5 = telebot.types.KeyboardButton("Технологии")
+    keyboard.add(button1, button2, button3, button4, button5)
 
     bot.send_message(chat_id=message.chat.id, text=text, reply_markup=keyboard)
 
